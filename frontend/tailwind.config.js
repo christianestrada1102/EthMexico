@@ -54,6 +54,21 @@ module.exports = {
           '0%': { transform: 'translateY(10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        shimmer: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+        pulse: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+        },
+      },
+      boxShadow: {
+        'glow-blue': '0 0 20px rgba(40, 160, 240, 0.3)',
+        'glow-cyan': '0 0 20px rgba(0, 224, 255, 0.3)',
+        'glow-lg-blue': '0 0 40px rgba(40, 160, 240, 0.4)',
+        'glow-lg-cyan': '0 0 40px rgba(0, 224, 255, 0.4)',
       },
     },
   },

@@ -5,9 +5,13 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { WalletCard } from "@/components/WalletCard";
 import { RequestWithdrawalModal } from "@/components/RequestWithdrawalModal";
+import { SignModal } from "@/components/SignModal";
+import { SendModal } from "@/components/SendModal";
+import { ActionButtons } from "@/components/ActionButtons";
+import { HistoryList } from "@/components/HistoryList";
 import { Toasts } from "@/components/Toasts";
 import { useWalletStore } from "@/store/walletStore";
-import { Plus, LogOut, Settings } from "lucide-react";
+import { Plus, LogOut, Settings, History } from "lucide-react";
 import { getWithdrawalCounter } from "@/lib/contract";
 import { CONTRACT_ADDRESS } from "@/lib/constants";
 
@@ -18,6 +22,8 @@ export default function DashboardPage() {
   const addToast = useWalletStore((state) => state.addToast);
   const theme = useWalletStore((state) => state.theme);
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [showSignModal, setShowSignModal] = useState(false);
+  const [showSendModal, setShowSendModal] = useState(false);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
 
   useEffect(() => {
@@ -120,47 +126,181 @@ export default function DashboardPage() {
           </p>
         </motion.div>
 
-        {/* Actions */}
+        {/* Actions - Premium Card Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
         >
-          <motion.button
-            whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(40, 160, 240, 0.4)" }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setShowRequestModal(true)}
-            className="flex items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan text-white font-semibold transition-all duration-200 shadow-lg shadow-arbitrum-blue/30 border border-arbitrum-cyan/30"
+          {/* Request Withdrawal Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative"
           >
-            <Plus className="w-5 h-5" />
-            <span>Solicitar Retiro</span>
-          </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowRequestModal(true)}
+              className="relative w-full flex flex-col items-center justify-center gap-4 p-8 rounded-3xl overflow-hidden"
+            >
+              {/* Animated gradient background */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-arbitrum-blue via-arbitrum-cyan to-arbitrum-blue"
+                animate={{
+                  backgroundPosition: ["0%", "200%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                style={{ backgroundSize: "200% 200%" }}
+              />
+              {/* Glow effect */}
+              <motion.div
+                className="absolute inset-0 bg-arbitrum-cyan/40 blur-2xl group-hover:opacity-100 opacity-70 transition-opacity"
+                animate={{
+                  opacity: [0.5, 0.8, 0.5],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              {/* Content */}
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <motion.div
+                  whileHover={{ rotate: [0, -10, 10, 0] }}
+                  transition={{ duration: 0.5 }}
+                  className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20"
+                >
+                  <Plus className="w-7 h-7 text-white" />
+                </motion.div>
+                <span className="text-white font-bold text-lg">Solicitar Retiro</span>
+                <p className="text-xs text-white/70 text-center">Retiro rápido L2→L1</p>
+              </div>
+              {/* Shine effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
+              />
+            </motion.button>
+          </motion.div>
 
-          <motion.button
-            whileHover={{ scale: 1.02, borderColor: "rgba(40, 160, 240, 0.5)" }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => addToast("Función en desarrollo", "info")}
-            className="flex items-center justify-center gap-3 p-6 rounded-2xl glass border border-arbitrum-blue/30 text-white font-semibold transition-all duration-200"
+          {/* Provide Liquidity Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative"
           >
-            <span>Proveer Liquidez</span>
-          </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => addToast("Función en desarrollo", "info")}
+              className="relative w-full flex flex-col items-center justify-center gap-4 p-8 rounded-3xl glass-glow border border-arbitrum-blue/30 overflow-hidden"
+            >
+              {/* Hover gradient */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-arbitrum-blue/20 via-purple-500/10 to-arbitrum-cyan/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
+              {/* Content */}
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <motion.div
+                  whileHover={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 0.5 }}
+                  className="p-3 rounded-2xl bg-arbitrum-blue/20 border border-arbitrum-blue/30"
+                >
+                  <svg className="w-7 h-7 text-arbitrum-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </motion.div>
+                <span className="text-white font-bold text-lg">Proveer Liquidez</span>
+                <p className="text-xs text-gray-400 text-center">Conviértete en LP</p>
+              </div>
+              {/* Shine effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
+              />
+            </motion.button>
+          </motion.div>
 
-          <motion.button
-            whileHover={{ scale: 1.02, borderColor: "rgba(40, 160, 240, 0.5)" }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => addToast("Función en desarrollo", "info")}
-            className="flex items-center justify-center gap-3 p-6 rounded-2xl glass border border-arbitrum-blue/30 text-white font-semibold transition-all duration-200"
+          {/* Finalize Withdrawals Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative"
           >
-            <span>Finalizar Retiros</span>
-          </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => addToast("Función en desarrollo", "info")}
+              className="relative w-full flex flex-col items-center justify-center gap-4 p-8 rounded-3xl glass-glow border border-arbitrum-blue/30 overflow-hidden"
+            >
+              {/* Hover gradient */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-emerald-500/10 to-arbitrum-cyan/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
+              {/* Content */}
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <motion.div
+                  whileHover={{ rotate: [0, 360] }}
+                  transition={{ duration: 0.8 }}
+                  className="p-3 rounded-2xl bg-green-500/20 border border-green-500/30"
+                >
+                  <svg className="w-7 h-7 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </motion.div>
+                <span className="text-white font-bold text-lg">Finalizar Retiros</span>
+                <p className="text-xs text-gray-400 text-center">Completar retiros</p>
+              </div>
+              {/* Shine effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
+              />
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mb-8"
+        >
+          <ActionButtons
+            onSignClick={() => setShowSignModal(true)}
+            onSendClick={() => setShowSendModal(true)}
+          />
+        </motion.div>
+
+        {/* History Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <History className="w-6 h-6 text-arbitrum-cyan" />
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent">
+              Historial
+            </h2>
+          </div>
+          <HistoryList />
         </motion.div>
 
         {/* Info Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.7 }}
           className="p-6 rounded-2xl glass border border-arbitrum-blue/30"
         >
           <h2 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent">
@@ -183,6 +323,14 @@ export default function DashboardPage() {
       <RequestWithdrawalModal
         isOpen={showRequestModal}
         onClose={() => setShowRequestModal(false)}
+      />
+      <SignModal
+        isOpen={showSignModal}
+        onClose={() => setShowSignModal(false)}
+      />
+      <SendModal
+        isOpen={showSendModal}
+        onClose={() => setShowSendModal(false)}
       />
     </div>
   );
