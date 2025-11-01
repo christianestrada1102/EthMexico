@@ -96,33 +96,36 @@ export function RequestWithdrawalModal({
           className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         />
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          exit={{ opacity: 0, scale: 0.95, y: 30 }}
+          transition={{ type: "spring", duration: 0.4 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative bg-white/10 dark:bg-gray-900/90 backdrop-blur-xl rounded-2xl p-6 max-w-md w-full border border-white/20 shadow-2xl"
+          className="relative glass-glow rounded-3xl p-8 max-w-md w-full border border-arbitrum-blue/30 shadow-2xl"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-8">
             <h2
               id="request-modal-title"
-              className="text-2xl font-bold text-gray-900 dark:text-white"
+              className="text-2xl font-bold bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent"
             >
               Solicitar Retiro
             </h2>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-2 rounded-xl hover:bg-arbitrum-blue/20 border border-arbitrum-blue/30 transition-colors"
               aria-label="Cerrar modal"
             >
-              <X className="w-5 h-5" />
-            </button>
+              <X className="w-5 h-5 text-gray-300" />
+            </motion.button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="amount"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-300 mb-3 uppercase tracking-wider"
               >
                 Monto (ETH)
               </label>
@@ -134,19 +137,21 @@ export function RequestWithdrawalModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="1.0"
-                className="w-full px-4 py-3 rounded-xl bg-white/5 dark:bg-gray-800/50 border border-white/10 focus:border-blue-500 focus:outline-none text-gray-900 dark:text-white"
+                className="w-full px-5 py-4 rounded-2xl glass border border-arbitrum-blue/30 focus:border-arbitrum-cyan focus:outline-none focus:ring-2 focus:ring-arbitrum-cyan/50 text-white placeholder-gray-500 transition-all"
                 required
                 disabled={loading}
               />
             </div>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(40, 160, 240, 0.4)" }}
+              whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-4 rounded-2xl bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-arbitrum-blue/30"
             >
               {loading ? "Procesando..." : "Solicitar Retiro"}
-            </button>
+            </motion.button>
           </form>
         </motion.div>
       </div>

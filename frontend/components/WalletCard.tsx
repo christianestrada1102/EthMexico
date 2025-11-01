@@ -50,26 +50,43 @@ export function WalletCard() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl"
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="relative glass-glow rounded-2xl p-6 border border-arbitrum-blue/30"
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <motion.div 
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            className="p-3.5 rounded-2xl bg-gradient-to-br from-arbitrum-blue to-arbitrum-cyan shadow-lg shadow-arbitrum-blue/30"
+          >
             <Wallet className="w-6 h-6 text-white" />
-          </div>
+          </motion.div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-xl font-bold text-white mb-1">
               Mi Wallet
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-300">
               {wallet.providerType === "metamask" ? "MetaMask" : "Demo"}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.8, 1, 0.8]
+          }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="flex items-center gap-2"
+        >
           <div
-            className={`w-3 h-3 rounded-full ${
-              wallet.providerType === "metamask" ? "bg-green-500" : "bg-yellow-500"
+            className={`w-3 h-3 rounded-full shadow-lg ${
+              wallet.providerType === "metamask" 
+                ? "bg-green-400 shadow-green-400/50" 
+                : "bg-yellow-400 shadow-yellow-400/50"
             }`}
             aria-label={
               wallet.providerType === "metamask"
@@ -77,45 +94,49 @@ export function WalletCard() {
                 : "Wallet demo"
             }
           />
-        </div>
+        </motion.div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+          <p className="text-xs text-gray-400 mb-2 uppercase tracking-wider">
             Dirección
           </p>
-          <div className="flex items-center gap-2">
-            <p className="font-mono text-sm text-gray-900 dark:text-white">
+          <div className="flex items-center gap-3">
+            <p className="font-mono text-sm text-white bg-arbitrum-navy/50 px-3 py-2 rounded-xl border border-arbitrum-blue/20">
               {formatAddress(wallet.address)}
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={handleCopy}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-2 rounded-xl hover:bg-arbitrum-blue/20 border border-arbitrum-blue/30 transition-all hover:border-arbitrum-blue/50"
               aria-label="Copiar dirección"
             >
               {copied ? (
-                <Check className="w-4 h-4 text-green-500" />
+                <Check className="w-4 h-4 text-arbitrum-cyan" />
               ) : (
-                <Copy className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                <Copy className="w-4 h-4 text-gray-300" />
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-1">
-            <p className="text-xs text-gray-500 dark:text-gray-400">Balance</p>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-gray-400 uppercase tracking-wider">Balance</p>
             {wallet.providerType === "metamask" && (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleRefreshBalance}
-                className="text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                className="text-xs text-arbitrum-cyan hover:text-arbitrum-blue transition-colors font-medium"
               >
                 Actualizar
-              </button>
+              </motion.button>
             )}
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-3xl font-bold bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent">
             {parseFloat(balance).toFixed(4)} ETH
           </p>
         </div>

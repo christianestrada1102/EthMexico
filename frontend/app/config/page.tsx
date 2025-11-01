@@ -38,15 +38,19 @@ export default function ConfigPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-arbitrum-navy via-arbitrum-dark to-arbitrum-navy p-4 md:p-8 relative overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-arbitrum-blue/5 rounded-full blur-3xl" />
+      </div>
+
       <Toasts />
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto relative z-10">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => router.back()}
-          className="flex items-center gap-2 mb-8 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 mb-8 text-gray-300 hover:text-arbitrum-cyan transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Volver</span>
@@ -57,61 +61,65 @@ export default function ConfigPage() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-6"
         >
-          <div className="p-6 rounded-2xl bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl border border-white/20">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <div className="p-6 rounded-2xl glass border border-arbitrum-blue/30">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent mb-6">
               Configuración
             </h2>
 
             {/* Theme Toggle */}
-            <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 dark:bg-gray-800/50 border border-white/10 mb-4">
+            <div className="flex items-center justify-between p-5 rounded-2xl glass border border-arbitrum-blue/30 mb-4">
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                <h3 className="font-semibold text-white mb-1">
                   Tema
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-300">
                   Cambiar entre tema claro y oscuro
                 </p>
               </div>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 15 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={handleToggleTheme}
-                className="p-3 rounded-xl bg-white/10 dark:bg-gray-800/50 hover:bg-white/20 dark:hover:bg-gray-800/70 transition-colors"
+                className="p-3 rounded-xl glass border border-arbitrum-blue/30 hover:border-arbitrum-cyan/50 transition-all"
                 aria-label="Cambiar tema"
               >
                 {theme === "dark" ? (
-                  <Sun className="w-5 h-5 text-gray-900 dark:text-white" />
+                  <Sun className="w-5 h-5 text-arbitrum-cyan" />
                 ) : (
-                  <Moon className="w-5 h-5 text-gray-900 dark:text-white" />
+                  <Moon className="w-5 h-5 text-arbitrum-blue" />
                 )}
-              </button>
+              </motion.button>
             </div>
 
             {/* Reset Session */}
-            <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 dark:bg-gray-800/50 border border-white/10">
+            <div className="flex items-center justify-between p-5 rounded-2xl glass border border-arbitrum-blue/30">
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                <h3 className="font-semibold text-white mb-1">
                   Restablecer Sesión
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-300">
                   Eliminar todo el historial y datos locales
                 </p>
               </div>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleResetSession}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-600 dark:text-red-400 font-semibold transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-400 font-semibold transition-all"
               >
                 <Trash2 className="w-4 h-4" />
                 <span>Restablecer</span>
-              </button>
+              </motion.button>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="p-6 rounded-2xl bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl border border-white/20">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="p-6 rounded-2xl glass border border-arbitrum-blue/30">
+            <h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent">
               Estadísticas
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Elementos en historial: <strong>{history.length}</strong>
+            <p className="text-gray-300">
+              Elementos en historial: <strong className="text-arbitrum-cyan">{history.length}</strong>
             </p>
           </div>
         </motion.div>

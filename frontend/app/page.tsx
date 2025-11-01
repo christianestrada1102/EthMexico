@@ -29,32 +29,56 @@ export default function Home() {
   }, [isConnected, router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full text-center">
+    <div className="min-h-screen bg-gradient-to-br from-arbitrum-navy via-arbitrum-dark to-arbitrum-navy flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-arbitrum-blue/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-arbitrum-cyan/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
+
+      <div className="max-w-4xl w-full text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 mb-8 shadow-xl">
-            <Wallet className="w-10 h-10 text-white" />
-          </div>
+          <motion.div 
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-arbitrum-blue to-arbitrum-cyan mb-8 shadow-2xl shadow-arbitrum-blue/40"
+          >
+            <Wallet className="w-12 h-12 text-white" />
+          </motion.div>
 
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+          <motion.h1 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-arbitrum-blue via-arbitrum-cyan to-arbitrum-blue bg-clip-text text-transparent mb-4 bg-[length:200%_auto] animate-[shimmer_3s_ease-in-out_infinite]"
+          >
             BridgeFastWithdraw
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-2">
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-xl md:text-2xl text-gray-300 mb-2 font-medium"
+          >
             Sistema de Retiros Rápidos L2→L1
-          </p>
-          <p className="text-lg text-gray-500 dark:text-gray-400 mb-12">
+          </motion.p>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-lg text-gray-400 mb-12"
+          >
             Recibe tus fondos instantáneamente en lugar de esperar 7 días
-          </p>
+          </motion.p>
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(40, 160, 240, 0.5)" }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            className="inline-flex items-center gap-3 px-8 py-5 rounded-2xl bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan text-white font-semibold text-lg shadow-2xl shadow-arbitrum-blue/40 transition-all duration-200 border border-arbitrum-cyan/30"
           >
             <Wallet className="w-5 h-5" />
             <span>Conectar Wallet</span>
@@ -65,13 +89,13 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-xl border border-white/20"
+              transition={{ delay: 0.5 }}
+              className="p-6 rounded-2xl glass border border-arbitrum-blue/30 hover:border-arbitrum-cyan/50 transition-all"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg font-semibold text-white mb-2">
                 ⚡ Instantáneo
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-300">
                 Recibe tus fondos inmediatamente sin esperar
               </p>
             </motion.div>
@@ -79,13 +103,13 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-xl border border-white/20"
+              transition={{ delay: 0.6 }}
+              className="p-6 rounded-2xl glass border border-arbitrum-blue/30 hover:border-arbitrum-cyan/50 transition-all"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg font-semibold text-white mb-2">
                 🔒 Seguro
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-300">
                 Sistema de bonds y validaciones robustas
               </p>
             </motion.div>
@@ -93,13 +117,13 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-xl border border-white/20"
+              transition={{ delay: 0.7 }}
+              className="p-6 rounded-2xl glass border border-arbitrum-blue/30 hover:border-arbitrum-cyan/50 transition-all"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg font-semibold text-white mb-2">
                 💰 Comisiones Justas
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-300">
                 Comisión del 1% para retiros rápidos
               </p>
             </motion.div>
