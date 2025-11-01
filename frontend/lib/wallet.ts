@@ -19,7 +19,7 @@ export function formatAddress(address: string): string {
 // Check if MetaMask is installed
 export function isMetaMaskInstalled(): boolean {
   if (typeof window === "undefined") return false;
-  return typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask;
+  return typeof window.ethereum !== "undefined" && !!window.ethereum?.isMetaMask;
 }
 
 // Connect to MetaMask
