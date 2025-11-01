@@ -8,9 +8,8 @@ import { RequestWithdrawalModal } from "@/components/RequestWithdrawalModal";
 import { Toasts } from "@/components/Toasts";
 import { useWalletStore } from "@/store/walletStore";
 import { Plus, LogOut, Settings } from "lucide-react";
-import { getWithdrawalCounter, getContract } from "@/lib/contract";
+import { getWithdrawalCounter } from "@/lib/contract";
 import { CONTRACT_ADDRESS } from "@/lib/constants";
-import { ethers } from "ethers";
 
 export default function DashboardPage() {
   const router = useRouter();
