@@ -79,9 +79,13 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
 
     setLoading(true);
     try {
-      if (wallet.providerType === "metamask" && wallet.provider && wallet.signer && wallet.address) {
+      if (wallet && wallet.providerType === "metamask" && wallet.provider && wallet.signer && wallet.address) {
+        // Type guard: wallet.provider is guaranteed to be BrowserProvider here
+        const provider = wallet.provider;
+        const address = wallet.address;
+        
         // Check if LP can provide liquidity
-        const canProvide = await canProvideLiquidity(wallet.provider, wallet.address);
+        const canProvide = await canProvideLiquidity(provider, address);
         if (!canProvide) {
           addToast("No tienes suficiente bond para proveer liquidez.", "error");
           setLoading(false);
