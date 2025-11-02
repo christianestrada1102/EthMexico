@@ -92,7 +92,7 @@ export function FinalizeWithdrawalModal({ isOpen, onClose }: FinalizeWithdrawalM
 
     setLoading(true);
     try {
-      if (wallet.providerType === "metamask" && wallet.signer) {
+      if (wallet && wallet.providerType === "metamask" && wallet.signer) {
         const tx = await finalizeWithdrawal(wallet.signer, parseInt(requestId));
         
         addToHistory({

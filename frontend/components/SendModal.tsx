@@ -35,7 +35,7 @@ export function SendModal({ isOpen, onClose }: SendModalProps) {
 
     setLoading(true);
     try {
-      if (wallet.providerType === "metamask" && wallet.signer) {
+      if (wallet && wallet.providerType === "metamask" && wallet.signer) {
         // Real transaction with MetaMask
         const tx = await wallet.signer.sendTransaction({
           to: recipient,

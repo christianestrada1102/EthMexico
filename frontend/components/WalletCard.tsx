@@ -33,6 +33,7 @@ export function WalletCard() {
   useEffect(() => {
     const loadWalletName = async () => {
       if (wallet?.address) {
+        // wallet.provider is optional, getWalletName handles undefined
         const name = await getWalletName(wallet.address, wallet.provider);
         setWalletName(name);
       }

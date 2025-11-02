@@ -28,7 +28,7 @@ export function SignModal({ isOpen, onClose }: SignModalProps) {
 
     setLoading(true);
     try {
-      if (wallet.providerType === "metamask" && wallet.signer) {
+      if (wallet && wallet.providerType === "metamask" && wallet.signer) {
         // Real signature with MetaMask
         const sig = await wallet.signer.signMessage(message);
         setSignature(sig);

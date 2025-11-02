@@ -30,7 +30,7 @@ export function RequestWithdrawalModal({
 
     setLoading(true);
     try {
-      if (wallet.providerType === "metamask") {
+      if (wallet && wallet.providerType === "metamask" && wallet.signer) {
         const tx = await requestWithdrawal(wallet.signer, amount);
         addToHistory({
           type: "withdrawal",
