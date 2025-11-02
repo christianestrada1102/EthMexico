@@ -26,12 +26,14 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
     const loadAvailableRequests = async () => {
       if (wallet?.providerType === "metamask" && wallet.provider && wallet.address) {
         try {
-          const total = await getWithdrawalCounter(wallet.provider);
+          // Type assertion after validation
+          const provider = wallet.provider as ethers.BrowserProvider;
+          const total = await getWithdrawalCounter(provider);
           const requests = [];
           
           for (let i = 0; i < Number(total); i++) {
             try {
-              const withdrawal = await getWithdrawal(wallet.provider, i);
+              const withdrawal = await getWithdrawal(provider, i);
               if (!withdrawal.isAdvanced && !withdrawal.isFinalized && withdrawal.liquidityProvider === "0x0000000000000000000000000000000000000000") {
                 requests.push(i);
               }
@@ -55,12 +57,14 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
     const loadRequestDetails = async () => {
       if (requestId && wallet?.providerType === "metamask" && wallet.provider && wallet.address) {
         try {
+          // Type assertion after validation
+          const provider = wallet.provider as ethers.BrowserProvider;
           const id = parseInt(requestId);
-          const withdrawal = await getWithdrawal(wallet.provider, id);
+          const withdrawal = await getWithdrawal(provider, id);
           setSelectedRequest(withdrawal);
           
           const amount = ethers.formatEther(withdrawal.amount);
-          const fee = await calculateFee(wallet.provider, amount);
+          const fee = await calculateFee(provider, amount);
           setFeeAmount(fee);
         } catch (error) {
           addToast("Error al cargar detalles de la solicitud.", "error");
