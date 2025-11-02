@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, TrendingUp } from "lucide-react";
 import { useWalletStore } from "@/store/walletStore";
 import { provideLiquidity, getWithdrawal, calculateFee, getWithdrawalCounter, canProvideLiquidity } from "@/lib/contract";
+import { validateRPC, validateContract } from "@/lib/wallet";
 import { ethers } from "ethers";
 
 interface ProvideLiquidityModalProps {
@@ -90,6 +91,22 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
         const signer: ethers.JsonRpcSigner = wallet.signer as ethers.JsonRpcSigner;
         const address: string = wallet.address as string;
         
+        // Validate RPC is working
+        const rpcValidation = await validateRPC(provider);
+        if (!rpcValidation.valid) {
+          addToast(rpcValidation.error || "El RPC no responde. Cambia el RPC en MetaMask.", "error");
+          setLoading(false);
+          return;
+        }
+        
+        // Validate contract exists
+        const contractValidation = await validateContract(provider);
+        if (!contractValidation.exists) {
+          addToast(contractValidation.error || "El contrato no está desplegado.", "error");
+          setLoading(false);
+          return;
+        }
+        
         // Check if LP can provide liquidity
         const canProvide = await canProvideLiquidity(provider, address);
         if (!canProvide) {
@@ -138,7 +155,22 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
       setSelectedRequest(null);
       onClose();
     } catch (error: any) {
-          addToast(error.message || "Error al aportar liquidez.", "error");
+      let errorMessage = "Error al aportar liquidez.";
+      
+      // Handle specific error cases
+      if (error?.message?.includes("Failed to fetch") || error?.code === "UNKNOWN_ERROR") {
+        errorMessage = "Error de conexión. Verifica que estés en Arbitrum Sepolia y que el RPC funcione.";
+      } else if (error?.message?.includes("insufficient funds") || error?.code === "INSUFFICIENT_FUNDS") {
+        errorMessage = "Fondos insuficientes. Necesitas ETH en Arbitrum Sepolia para pagar el gas.";
+      } else if (error?.message?.includes("user rejected") || error?.code === 4001) {
+        errorMessage = "Transacción cancelada por el usuario.";
+      } else if (error?.message?.includes("execution reverted") || error?.code === "CALL_EXCEPTION") {
+        errorMessage = `Error en el contrato: ${error.reason || error.message}`;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
+      addToast(errorMessage, "error");
       addToHistory({
         type: "liquidity",
         status: "failed",

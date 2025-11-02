@@ -57,8 +57,9 @@ export async function connectMetaMask(): Promise<WalletState> {
                 decimals: 18,
               },
               rpcUrls: [
+                "https://arbitrum-sepolia.blockpi.network/v1/rpc/public",
+                "https://arbitrum-sepolia-rpc.publicnode.com",
                 "https://sepolia-rollup.arbitrum.io/rpc",
-                "https://arb-sepolia.g.alchemy.com/v2/demo",
               ],
               blockExplorerUrls: ["https://sepolia.arbiscan.io"],
             },
@@ -84,6 +85,41 @@ export async function connectMetaMask(): Promise<WalletState> {
 export async function getBalance(address: string, provider: ethers.BrowserProvider): Promise<string> {
   const balance = await provider.getBalance(address);
   return ethers.formatEther(balance);
+}
+
+// Validate RPC is working
+export async function validateRPC(provider: ethers.BrowserProvider): Promise<{ valid: boolean; error?: string }> {
+  try {
+    await Promise.race([
+      provider.getBlockNumber(),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Timeout")), 10000))
+    ]);
+    return { valid: true };
+  } catch (error: any) {
+    return { 
+      valid: false, 
+      error: "El RPC no responde. Por favor, cambia el RPC en MetaMask manualmente." 
+    };
+  }
+}
+
+// Validate contract exists on network
+export async function validateContract(provider: ethers.BrowserProvider): Promise<{ exists: boolean; error?: string }> {
+  try {
+    const code = await provider.getCode(CONTRACT_ADDRESS);
+    if (code === "0x" || code === "0x0") {
+      return { 
+        exists: false, 
+        error: `El contrato no está desplegado en esta red en la dirección ${CONTRACT_ADDRESS}. Por favor, despliega el contrato primero en Arbitrum Sepolia.` 
+      };
+    }
+    return { exists: true };
+  } catch (error: any) {
+    return { 
+      exists: false, 
+      error: `Error al verificar el contrato: ${error.message}` 
+    };
+  }
 }
 
 // Get contract instance
