@@ -16,7 +16,7 @@ export function WalletCard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [prevBalance, setPrevBalance] = useState<string | null>(null);
   const [showPulse, setShowPulse] = useState(false);
-  const [walletName, setWalletName] = useState<{ name: string; type: "ens" | "metamask" | "address" } | null>(null);
+  const [walletName, setWalletName] = useState<{ name: string; type: "ens" | "alias" | "wallet" | "address" } | null>(null);
 
   useEffect(() => {
     if (wallet?.balance) {
@@ -112,6 +112,11 @@ export function WalletCard() {
                 {walletName?.type === "ens" && (
                   <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-arbitrum-cyan/20 text-arbitrum-cyan border border-arbitrum-cyan/30">
                     ENS
+                  </span>
+                )}
+                {walletName?.type === "alias" && (
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                    Personalizado
                   </span>
                 )}
               </div>

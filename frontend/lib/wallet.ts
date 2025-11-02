@@ -110,39 +110,101 @@ export function simulateDemoTx(): string {
   ).join("");
 }
 
-// Get ENS name or MetaMask account name
+// Helper functions for wallet names
+const WALLET_ALIAS_KEY = "settarb_wallet_aliases";
+const WALLET_COUNTER_KEY = "settarb_wallet_counter";
+
+// Get or create wallet number
+function getWalletNumber(address: string): number {
+  if (typeof window === "undefined") return 1;
+  
+  try {
+    const walletNumbersStr = localStorage.getItem(WALLET_COUNTER_KEY);
+    const walletNumbers: Record<string, number> = walletNumbersStr 
+      ? JSON.parse(walletNumbersStr) 
+      : {};
+    
+    const addressLower = address.toLowerCase();
+    
+    // If wallet already has a number, return it
+    if (walletNumbers[addressLower]) {
+      return walletNumbers[addressLower];
+    }
+    
+    // Otherwise, assign a new number
+    const maxNumber = Math.max(0, ...Object.values(walletNumbers));
+    const newNumber = maxNumber + 1;
+    walletNumbers[addressLower] = newNumber;
+    
+    localStorage.setItem(WALLET_COUNTER_KEY, JSON.stringify(walletNumbers));
+    return newNumber;
+  } catch (error) {
+    return 1;
+  }
+}
+
+// Get custom alias for wallet
+function getWalletAlias(address: string): string | null {
+  if (typeof window === "undefined") return null;
+  
+  try {
+    const aliasesStr = localStorage.getItem(WALLET_ALIAS_KEY);
+    const aliases: Record<string, string> = aliasesStr 
+      ? JSON.parse(aliasesStr) 
+      : {};
+    
+    return aliases[address.toLowerCase()] || null;
+  } catch (error) {
+    return null;
+  }
+}
+
+// Set custom alias for wallet
+export function setWalletAlias(address: string, alias: string): void {
+  if (typeof window === "undefined") return;
+  
+  try {
+    const aliasesStr = localStorage.getItem(WALLET_ALIAS_KEY);
+    const aliases: Record<string, string> = aliasesStr 
+      ? JSON.parse(aliasesStr) 
+      : {};
+    
+    aliases[address.toLowerCase()] = alias;
+    localStorage.setItem(WALLET_ALIAS_KEY, JSON.stringify(aliases));
+  } catch (error) {
+    console.error("Error setting wallet alias:", error);
+  }
+}
+
+// Get ENS name or wallet name (alias, numbered, or formatted address)
 export async function getWalletName(
   address: string,
   provider?: ethers.BrowserProvider
-): Promise<{ name: string; type: "ens" | "metamask" | "address" }> {
-  if (!provider) {
-    return { name: formatAddress(address), type: "address" };
-  }
-
+): Promise<{ name: string; type: "ens" | "alias" | "wallet" | "address" }> {
   try {
-    // Try to get ENS name
-    const ensName = await provider.lookupAddress(address);
-    if (ensName) {
-      return { name: ensName, type: "ens" };
-    }
-
-    // Try to get MetaMask account name (if available)
-    if (typeof window !== "undefined" && window.ethereum) {
+    // Priority 1: Try to get ENS name (if provider available)
+    if (provider) {
       try {
-        const accounts = await provider.listAccounts();
-        const account = accounts.find((acc) => acc.address.toLowerCase() === address.toLowerCase());
-        if (account) {
-          // MetaMask doesn't expose account names via API, but we can check localStorage
-          // For now, return formatted address
-          return { name: formatAddress(address), type: "address" };
+        const ensName = await provider.lookupAddress(address);
+        if (ensName) {
+          return { name: ensName, type: "ens" };
         }
-      } catch (e) {
-        // Ignore
+      } catch (error) {
+        // Continue to next option if ENS lookup fails
       }
     }
 
-    return { name: formatAddress(address), type: "address" };
+    // Priority 2: Check for custom alias
+    const alias = getWalletAlias(address);
+    if (alias) {
+      return { name: alias, type: "alias" };
+    }
+
+    // Priority 3: Use numbered wallet name
+    const walletNumber = getWalletNumber(address);
+    return { name: `Wallet ${walletNumber}`, type: "wallet" };
   } catch (error) {
+    // Final fallback: formatted address
     return { name: formatAddress(address), type: "address" };
   }
 }
