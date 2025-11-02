@@ -110,3 +110,40 @@ export function simulateDemoTx(): string {
   ).join("");
 }
 
+// Get ENS name or MetaMask account name
+export async function getWalletName(
+  address: string,
+  provider?: ethers.BrowserProvider
+): Promise<{ name: string; type: "ens" | "metamask" | "address" }> {
+  if (!provider) {
+    return { name: formatAddress(address), type: "address" };
+  }
+
+  try {
+    // Try to get ENS name
+    const ensName = await provider.lookupAddress(address);
+    if (ensName) {
+      return { name: ensName, type: "ens" };
+    }
+
+    // Try to get MetaMask account name (if available)
+    if (typeof window !== "undefined" && window.ethereum) {
+      try {
+        const accounts = await provider.listAccounts();
+        const account = accounts.find((acc) => acc.address.toLowerCase() === address.toLowerCase());
+        if (account) {
+          // MetaMask doesn't expose account names via API, but we can check localStorage
+          // For now, return formatted address
+          return { name: formatAddress(address), type: "address" };
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+
+    return { name: formatAddress(address), type: "address" };
+  } catch (error) {
+    return { name: formatAddress(address), type: "address" };
+  }
+}
+

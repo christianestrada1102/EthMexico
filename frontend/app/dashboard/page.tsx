@@ -5,15 +5,19 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { WalletCard } from "@/components/WalletCard";
 import { RequestWithdrawalModal } from "@/components/RequestWithdrawalModal";
+import { ProvideLiquidityModal } from "@/components/ProvideLiquidityModal";
+import { FinalizeWithdrawalModal } from "@/components/FinalizeWithdrawalModal";
 import { SignModal } from "@/components/SignModal";
 import { SendModal } from "@/components/SendModal";
 import { ActionButtons } from "@/components/ActionButtons";
 import { HistoryList } from "@/components/HistoryList";
 import { Toasts } from "@/components/Toasts";
 import { useWalletStore } from "@/store/walletStore";
-import { Plus, LogOut, Settings, History } from "lucide-react";
+import { Plus, LogOut, Settings, History, TrendingUp, CheckCircle, Coins } from "lucide-react";
 import { getWithdrawalCounter } from "@/lib/contract";
+import { ethers } from "ethers";
 import { CONTRACT_ADDRESS } from "@/lib/constants";
+import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -22,9 +26,12 @@ export default function DashboardPage() {
   const addToast = useWalletStore((state) => state.addToast);
   const theme = useWalletStore((state) => state.theme);
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [showProvideModal, setShowProvideModal] = useState(false);
+  const [showFinalizeModal, setShowFinalizeModal] = useState(false);
   const [showSignModal, setShowSignModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
+  const [contractBalance, setContractBalance] = useState("0");
 
   useEffect(() => {
     if (theme === "dark") {
@@ -41,17 +48,25 @@ export default function DashboardPage() {
   }, [wallet, router]);
 
   useEffect(() => {
-    const loadWithdrawalCount = async () => {
+    const loadStats = async () => {
       if (wallet?.providerType === "metamask" && wallet.provider) {
         try {
           const count = await getWithdrawalCounter(wallet.provider);
           setWithdrawalCount(Number(count));
+          
+          // Load contract balance
+          try {
+            const balance = await wallet.provider.getBalance(CONTRACT_ADDRESS);
+            setContractBalance(ethers.formatEther(balance));
+          } catch (e) {
+            // Ignore
+          }
         } catch (error) {
-          console.error("Error loading withdrawal count:", error);
+          console.error("Error loading stats:", error);
         }
       }
     };
-    loadWithdrawalCount();
+    loadStats();
   }, [wallet]);
 
   const handleDisconnect = () => {
@@ -63,12 +78,9 @@ export default function DashboardPage() {
   if (!wallet) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-arbitrum-navy via-arbitrum-dark to-arbitrum-navy p-4 md:p-8 relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-arbitrum-blue/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-arbitrum-cyan/5 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen p-4 md:p-8 relative overflow-hidden">
+      {/* Settarb Animated Background */}
+      <AnimatedBackground />
 
       <Toasts />
 
@@ -109,24 +121,7 @@ export default function DashboardPage() {
           <WalletCard />
         </div>
 
-        {/* Contract Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-8 p-5 rounded-2xl glass border border-arbitrum-blue/30"
-        >
-          <p className="text-sm text-gray-300">
-            <span className="font-semibold text-arbitrum-cyan">Contrato:</span>{" "}
-            <span className="font-mono text-white">{CONTRACT_ADDRESS.slice(0, 10)}...{CONTRACT_ADDRESS.slice(-8)}</span>
-          </p>
-          <p className="text-sm text-gray-300 mt-2">
-            <span className="font-semibold text-arbitrum-cyan">Solicitudes totales:</span>{" "}
-            <span className="text-white font-bold">{withdrawalCount}</span>
-          </p>
-        </motion.div>
-
-        {/* Actions - Premium Card Buttons */}
+        {/* Main Actions Grid - 6 Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -200,7 +195,7 @@ export default function DashboardPage() {
           >
             <motion.button
               whileTap={{ scale: 0.98 }}
-              onClick={() => addToast("Función en desarrollo", "info")}
+              onClick={() => setShowProvideModal(true)}
               className="relative w-full flex flex-col items-center justify-center gap-4 p-8 rounded-3xl glass-glow border border-arbitrum-blue/30 overflow-hidden"
             >
               {/* Hover gradient */}
@@ -238,7 +233,7 @@ export default function DashboardPage() {
           >
             <motion.button
               whileTap={{ scale: 0.98 }}
-              onClick={() => addToast("Función en desarrollo", "info")}
+              onClick={() => setShowFinalizeModal(true)}
               className="relative w-full flex flex-col items-center justify-center gap-4 p-8 rounded-3xl glass-glow border border-arbitrum-blue/30 overflow-hidden"
             >
               {/* Hover gradient */}
@@ -267,17 +262,170 @@ export default function DashboardPage() {
           </motion.div>
         </motion.div>
 
-        {/* Action Buttons */}
+        {/* Additional Actions Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+        >
+          {/* Deposit Bond Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.5 }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative"
+          >
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => addToast("Próximamente: Depositar Bond", "info")}
+              className="relative w-full flex flex-col items-center justify-center gap-4 p-6 rounded-3xl glass-glow border border-arbitrum-blue/30 overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-orange-500/10 to-arbitrum-cyan/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <motion.div
+                  whileHover={{ rotate: [0, 360] }}
+                  transition={{ duration: 0.8 }}
+                  className="p-3 rounded-2xl bg-yellow-500/20 border border-yellow-500/30"
+                >
+                  <Coins className="w-6 h-6 text-yellow-400" />
+                </motion.div>
+                <span className="text-white font-bold text-base">Depositar Bond</span>
+                <p className="text-xs text-gray-400 text-center">Para LPs</p>
+              </div>
+            </motion.button>
+          </motion.div>
+
+          {/* Sign Message Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.6 }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative"
+          >
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowSignModal(true)}
+              className="relative w-full flex flex-col items-center justify-center gap-4 p-6 rounded-3xl glass-glow border border-arbitrum-blue/30 overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-pink-500/10 to-arbitrum-cyan/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <motion.div
+                  whileHover={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 0.5 }}
+                  className="p-3 rounded-2xl bg-purple-500/20 border border-purple-500/30"
+                >
+                  <svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </motion.div>
+                <span className="text-white font-bold text-base">Firmar Mensaje</span>
+                <p className="text-xs text-gray-400 text-center">Firma con wallet</p>
+              </div>
+            </motion.button>
+          </motion.div>
+
+          {/* Send Transaction Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.7 }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative"
+          >
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowSendModal(true)}
+              className="relative w-full flex flex-col items-center justify-center gap-4 p-6 rounded-3xl glass-glow border border-arbitrum-blue/30 overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-cyan-500/10 to-arbitrum-cyan/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <motion.div
+                  whileHover={{ rotate: [0, -10, 10, 0] }}
+                  transition={{ duration: 0.5 }}
+                  className="p-3 rounded-2xl bg-blue-500/20 border border-blue-500/30"
+                >
+                  <svg className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                  </svg>
+                </motion.div>
+                <span className="text-white font-bold text-base">Enviar Transacción</span>
+                <p className="text-xs text-gray-400 text-center">Enviar ETH</p>
+              </div>
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* Protocol Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
           className="mb-8"
         >
-          <ActionButtons
-            onSignClick={() => setShowSignModal(true)}
-            onSendClick={() => setShowSendModal(true)}
-          />
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent mb-6">
+            Estadísticas del Protocolo
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.9 }}
+              className="glass-card p-6 rounded-2xl border border-arbitrum-blue/30"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-xl bg-arbitrum-blue/20 border border-arbitrum-blue/30">
+                  <TrendingUp className="w-5 h-5 text-arbitrum-cyan" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Total Retirado</p>
+                  <p className="text-2xl font-bold text-arbitrum-cyan">{contractBalance} ETH</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.0 }}
+              className="glass-card p-6 rounded-2xl border border-arbitrum-blue/30"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-xl bg-purple-500/20 border border-purple-500/30">
+                  <Plus className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Retiros Totales</p>
+                  <p className="text-2xl font-bold text-arbitrum-cyan">{withdrawalCount}</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.1 }}
+              className="glass-card p-6 rounded-2xl border border-arbitrum-blue/30"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-xl bg-green-500/20 border border-green-500/30">
+                  <CheckCircle className="w-5 h-5 text-green-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Estado</p>
+                  <p className="text-2xl font-bold text-green-400">Activo</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </motion.div>
 
         {/* History Section */}
@@ -323,6 +471,14 @@ export default function DashboardPage() {
       <RequestWithdrawalModal
         isOpen={showRequestModal}
         onClose={() => setShowRequestModal(false)}
+      />
+      <ProvideLiquidityModal
+        isOpen={showProvideModal}
+        onClose={() => setShowProvideModal(false)}
+      />
+      <FinalizeWithdrawalModal
+        isOpen={showFinalizeModal}
+        onClose={() => setShowFinalizeModal(false)}
       />
       <SignModal
         isOpen={showSignModal}

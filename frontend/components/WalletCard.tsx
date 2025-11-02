@@ -1,9 +1,9 @@
 "use client";
 
-import { Wallet, Copy, Check, RefreshCw, TrendingUp } from "lucide-react";
+import { Wallet, Copy, Check, RefreshCw, TrendingUp, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useWalletStore } from "@/store/walletStore";
-import { formatAddress } from "@/lib/wallet";
+import { formatAddress, getWalletName } from "@/lib/wallet";
 import { getBalance } from "@/lib/wallet";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -16,6 +16,7 @@ export function WalletCard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [prevBalance, setPrevBalance] = useState<string | null>(null);
   const [showPulse, setShowPulse] = useState(false);
+  const [walletName, setWalletName] = useState<{ name: string; type: "ens" | "metamask" | "address" } | null>(null);
 
   useEffect(() => {
     if (wallet?.balance) {
@@ -28,6 +29,16 @@ export function WalletCard() {
       setPrevBalance(newBalance);
     }
   }, [wallet?.balance, prevBalance]);
+
+  useEffect(() => {
+    const loadWalletName = async () => {
+      if (wallet?.address) {
+        const name = await getWalletName(wallet.address, wallet.provider);
+        setWalletName(name);
+      }
+    };
+    loadWalletName();
+  }, [wallet?.address, wallet?.provider]);
 
   const handleCopy = () => {
     if (wallet?.address) {
@@ -92,9 +103,17 @@ export function WalletCard() {
               </div>
             </motion.div>
             <div>
-              <h3 className="text-2xl font-bold text-white mb-1 tracking-tight">
-                Mi Wallet
-              </h3>
+              <div className="flex items-center gap-3 mb-2">
+                <User className="w-5 h-5 text-arbitrum-cyan" />
+                <h3 className="text-2xl font-bold text-white tracking-tight">
+                  {walletName?.name || formatAddress(wallet.address)}
+                </h3>
+                {walletName?.type === "ens" && (
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-arbitrum-cyan/20 text-arbitrum-cyan border border-arbitrum-cyan/30">
+                    ENS
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <motion.div
                   animate={{
@@ -115,6 +134,11 @@ export function WalletCard() {
                 <p className="text-sm text-gray-300 font-medium">
                   {wallet.providerType === "metamask" ? "MetaMask" : "Demo"}
                 </p>
+                {walletName?.type === "address" && wallet.providerType === "metamask" && (
+                  <p className="text-xs text-gray-400 font-mono ml-2">
+                    {formatAddress(wallet.address)}
+                  </p>
+                )}
               </div>
             </div>
           </div>
