@@ -60,7 +60,7 @@ export function FinalizeWithdrawalModal({ isOpen, onClose }: FinalizeWithdrawalM
 
   useEffect(() => {
     const loadRequestDetails = async () => {
-      if (requestId && wallet?.providerType === "metamask" && wallet.provider) {
+      if (requestId && wallet?.providerType === "metamask" && wallet.provider && wallet.address) {
         try {
           const id = parseInt(requestId);
           const withdrawal = await getWithdrawal(wallet.provider, id);
@@ -92,7 +92,7 @@ export function FinalizeWithdrawalModal({ isOpen, onClose }: FinalizeWithdrawalM
 
     setLoading(true);
     try {
-      if (wallet.providerType === "metamask") {
+      if (wallet.providerType === "metamask" && wallet.signer) {
         const tx = await finalizeWithdrawal(wallet.signer, parseInt(requestId));
         
         addToHistory({

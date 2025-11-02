@@ -24,7 +24,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
 
   useEffect(() => {
     const loadAvailableRequests = async () => {
-      if (wallet?.providerType === "metamask" && wallet.provider) {
+      if (wallet?.providerType === "metamask" && wallet.provider && wallet.address) {
         try {
           const total = await getWithdrawalCounter(wallet.provider);
           const requests = [];
@@ -53,7 +53,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
 
   useEffect(() => {
     const loadRequestDetails = async () => {
-      if (requestId && wallet?.providerType === "metamask" && wallet.provider) {
+      if (requestId && wallet?.providerType === "metamask" && wallet.provider && wallet.address) {
         try {
           const id = parseInt(requestId);
           const withdrawal = await getWithdrawal(wallet.provider, id);
@@ -79,7 +79,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
 
     setLoading(true);
     try {
-      if (wallet.providerType === "metamask") {
+      if (wallet.providerType === "metamask" && wallet.provider && wallet.signer && wallet.address) {
         // Check if LP can provide liquidity
         const canProvide = await canProvideLiquidity(wallet.provider, wallet.address);
         if (!canProvide) {
