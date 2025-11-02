@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, TrendingUp } from "lucide-react";
 import { useWalletStore } from "@/store/walletStore";
-import { provideLiquidity, getWithdrawal, calculateFee, getWithdrawalCounter } from "@/lib/contract";
+import { provideLiquidity, getWithdrawal, calculateFee, getWithdrawalCounter, canProvideLiquidity } from "@/lib/contract";
 import { ethers } from "ethers";
 
 interface ProvideLiquidityModalProps {
@@ -79,60 +79,55 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
 
     setLoading(true);
     try {
-      // Explicit type guard: verify wallet and all required properties
-      if (!wallet) {
-        addToast("Error: Wallet no conectada.", "error");
-        setLoading(false);
-        return;
-      }
-      
-      if (wallet.providerType !== "metamask") {
-        addToast("Error: Solo disponible para MetaMask.", "error");
-        setLoading(false);
-        return;
-      }
-      
-      if (!wallet.provider) {
-        addToast("Error: No se pudo conectar con MetaMask.", "error");
-        setLoading(false);
-        return;
-      }
-      
-      if (!wallet.signer) {
-        addToast("Error: Signer no disponible.", "error");
-        setLoading(false);
-        return;
-      }
-      
-      if (!wallet.address) {
-        addToast("Error: Dirección de wallet no disponible.", "error");
-        setLoading(false);
-        return;
-      }
-      
-      // At this point, TypeScript knows all are defined
-      const signer: ethers.JsonRpcSigner = wallet.signer;
+      if (wallet && wallet.providerType === "metamask" && wallet.provider && wallet.signer && wallet.address) {
+        // Type guard: verify all properties are defined
+        const provider = wallet.provider;
+        const signer = wallet.signer;
+        const address = wallet.address;
+        
+        // Check if LP can provide liquidity
+        const canProvide = await canProvideLiquidity(provider, address);
+        if (!canProvide) {
+          addToast("No tienes suficiente bond para proveer liquidez.", "error");
+          setLoading(false);
+          return;
+        }
 
-      const amount = ethers.formatEther(selectedRequest.amount);
-      const tx = await provideLiquidity(signer, parseInt(requestId), amount);
-      
-      addToHistory({
-        type: "liquidity",
-        status: "pending",
-        details: { action: "provide", requestId, amount },
-        txHash: tx.hash,
-      });
-      
-      addToast("Transacción enviada. Esperando confirmación...", "info");
-      await tx.wait();
-      
-      addToast("Liquidez proporcionada exitosamente.", "success");
-      addToHistory({
-        type: "liquidity",
-        status: "success",
-        details: { action: "provide", requestId, amount },
-        txHash: tx.hash,
-      });
+        const amount = ethers.formatEther(selectedRequest.amount);
+        const tx = await provideLiquidity(signer, parseInt(requestId), amount);
+        
+        addToHistory({
+          type: "liquidity",
+          status: "pending",
+          details: { action: "provide", requestId, amount },
+          txHash: tx.hash,
+        });
+        
+        addToast("Transacción enviada. Esperando confirmación...", "info");
+        await tx.wait();
+        
+        addToast("Liquidez proporcionada exitosamente.", "success");
+        addToHistory({
+          type: "liquidity",
+          status: "success",
+          details: { action: "provide", requestId, amount },
+          txHash: tx.hash,
+        });
+      } else {
+        // Demo simulation
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        const fakeHash = "0x" + Array.from({ length: 64 }, () =>
+          Math.floor(Math.random() * 16).toString(16)
+        ).join("");
+        
+        addToHistory({
+          type: "liquidity",
+          status: "success",
+          details: { action: "provide", requestId, amount: "1.0" },
+          txHash: fakeHash,
+        });
+        addToast("Liquidez proporcionada (simulado).", "success");
+      }
       
       setRequestId("");
       setSelectedRequest(null);
