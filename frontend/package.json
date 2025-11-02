@@ -2,7 +2,7 @@
   "name": "settarb",
   "version": "1.0.0",
   "private": true,
-  "description": "Settarb - Sistema de Retiros Rápidos y Liquidez L2→L1",
+  "description": "SettArb - Sistema de Retiros Rápidos y Liquidez L2→L1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

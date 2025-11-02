@@ -140,7 +140,7 @@ export default function Home() {
     {
       icon: DollarSign,
       title: "Comisiones Justas",
-      description: "Comisión del 1% para retiros rápidos",
+      description: "Comisión del 5% para retiros rápidos",
       gradient: "from-arbitrum-cyan/20 to-arbitrum-blue/20",
       iconColor: "text-arbitrum-cyan",
     },
@@ -280,7 +280,7 @@ export default function Home() {
             className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 relative"
           >
             <span className="bg-gradient-to-r from-white via-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent bg-[length:200%_auto] animate-[shimmer_3s_ease-in-out_infinite] drop-shadow-2xl font-display">
-              Settarb
+              SettArb
             </span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-arbitrum-blue/0 via-arbitrum-cyan/30 to-arbitrum-blue/0 blur-xl"

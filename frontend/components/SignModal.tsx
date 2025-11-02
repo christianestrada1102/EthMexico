@@ -141,7 +141,7 @@ export function SignModal({ isOpen, onClose }: SignModalProps) {
                   className="text-3xl font-bold bg-gradient-to-r from-arbitrum-blue via-arbitrum-cyan to-arbitrum-blue bg-clip-text text-transparent bg-[length:200%_auto] flex items-center gap-3"
                 >
                   <FileSignature className="w-8 h-8 text-arbitrum-cyan" />
-                  Firmar Mensaje
+                  Firmar Con Wallet
                 </motion.h2>
                 <motion.button
                   whileHover={{ scale: 1.15, rotate: 90 }}
@@ -272,7 +272,7 @@ export function SignModal({ isOpen, onClose }: SignModalProps) {
                         ) : (
                           <>
                             <FileSignature className="w-5 h-5" />
-                            Firmar Mensaje
+                            Firmar Con Wallet
                           </>
                         )}
                       </span>

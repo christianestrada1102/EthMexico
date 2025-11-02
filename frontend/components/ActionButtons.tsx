@@ -48,7 +48,7 @@ export function ActionButtons({ onSignClick, onSendClick }: ActionButtonsProps) 
     },
     {
       icon: FileSignature,
-      label: "Firmar Mensaje",
+      label: "Firmar Con Wallet",
       description: "Firmar con tu wallet",
       onClick: onSignClick,
       gradient: "from-purple-500/20 to-pink-500/20",

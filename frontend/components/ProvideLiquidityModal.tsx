@@ -93,7 +93,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
         // Check if LP can provide liquidity
         const canProvide = await canProvideLiquidity(provider, address);
         if (!canProvide) {
-          addToast("No tienes suficiente bond para proveer liquidez.", "error");
+            addToast("No tienes suficiente bond para aportar liquidez.", "error");
           setLoading(false);
           return;
         }
@@ -138,7 +138,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
       setSelectedRequest(null);
       onClose();
     } catch (error: any) {
-      addToast(error.message || "Error al proveer liquidez.", "error");
+          addToast(error.message || "Error al aportar liquidez.", "error");
       addToHistory({
         type: "liquidity",
         status: "failed",
@@ -208,7 +208,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
                   className="text-3xl font-bold bg-gradient-to-r from-arbitrum-blue via-arbitrum-cyan to-arbitrum-blue bg-clip-text text-transparent bg-[length:200%_auto] flex items-center gap-3"
                 >
                   <TrendingUp className="w-8 h-8 text-arbitrum-cyan" />
-                  Proveer Liquidez
+                  Aportar Liquidez
                 </motion.h2>
                 <motion.button
                   whileHover={{ scale: 1.15, rotate: 90 }}
@@ -299,7 +299,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
                     style={{ backgroundSize: "200% 100%" }}
                   />
                   <span className="relative z-10 text-white font-bold text-lg">
-                    {loading ? "Procesando..." : "Proveer Liquidez"}
+                      {loading ? "Procesando..." : "Aportar Liquidez"}
                   </span>
                 </motion.button>
               </form>

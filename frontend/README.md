@@ -1,6 +1,6 @@
-# Settarb - Frontend
+# SettArb - Frontend
 
-Frontend Next.js para el sistema de retiros rápidos Settarb desplegado en Sepolia.
+Frontend Next.js para el sistema de retiros rápidos SettArb desplegado en Sepolia.
 
 ## 🚀 Tecnologías
 
@@ -27,7 +27,7 @@ La aplicación estará disponible en `http://localhost:3000`
 
 ## 🎨 Diseño
 
-Settarb utiliza un sistema de diseño moderno inspirado en Arbitrum con:
+SettArb utiliza un sistema de diseño moderno inspirado en Arbitrum con:
 - Paleta de colores navy/blue/cyan
 - Glassmorphism y efectos de blur
 - Animaciones fluidas con Framer Motion

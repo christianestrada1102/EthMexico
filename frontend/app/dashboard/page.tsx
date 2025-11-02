@@ -213,7 +213,7 @@ export default function DashboardPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                   </svg>
                 </motion.div>
-                <span className="text-white font-bold text-lg">Proveer Liquidez</span>
+                <span className="text-white font-bold text-lg">Aportar Liquidez</span>
                 <p className="text-xs text-gray-400 text-center">Conviértete en LP</p>
               </div>
               {/* Shine effect */}
@@ -251,7 +251,7 @@ export default function DashboardPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </motion.div>
-                <span className="text-white font-bold text-lg">Finalizar Retiros</span>
+                <span className="text-white font-bold text-lg">Finalizar Retiro</span>
                 <p className="text-xs text-gray-400 text-center">Completar retiros</p>
               </div>
               {/* Shine effect */}
@@ -325,7 +325,7 @@ export default function DashboardPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                   </svg>
                 </motion.div>
-                <span className="text-white font-bold text-base">Firmar Mensaje</span>
+                <span className="text-white font-bold text-base">Firmar Con Wallet</span>
                 <p className="text-xs text-gray-400 text-center">Firma con wallet</p>
               </div>
             </motion.button>
