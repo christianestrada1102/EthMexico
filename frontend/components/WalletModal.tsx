@@ -207,7 +207,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 transition={{ delay: 0.4 }}
                 className="mt-8 text-xs text-gray-400 text-center leading-relaxed"
               >
-                Para usar el contrato real, necesitas MetaMask conectado a Sepolia.
+                Para usar el contrato real, necesitas MetaMask conectado a Arbitrum Sepolia.
               </motion.p>
             </div>
 
