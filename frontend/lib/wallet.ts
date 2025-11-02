@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { CONTRACT_ADDRESS, CONTRACT_ABI, SEPOLIA_CHAIN_ID } from "./constants";
+import { CONTRACT_ADDRESS, CONTRACT_ABI, ARBITRUM_SEPOLIA_CHAIN_ID } from "./constants";
 
 // Types
 export interface WalletState {
@@ -33,14 +33,14 @@ export async function connectMetaMask(): Promise<WalletState> {
   // Request account access
   const accounts = await provider.send("eth_requestAccounts", []);
   
-  // Check if we're on Sepolia
+  // Check if we're on Arbitrum Sepolia
   const network = await provider.getNetwork();
-  if (network.chainId !== BigInt(11155111)) {
-    // Try to switch to Sepolia
+  if (network.chainId !== BigInt(421614)) {
+    // Try to switch to Arbitrum Sepolia
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: SEPOLIA_CHAIN_ID }],
+        params: [{ chainId: ARBITRUM_SEPOLIA_CHAIN_ID }],
       });
     } catch (switchError: any) {
       // If chain doesn't exist, add it
@@ -49,19 +49,19 @@ export async function connectMetaMask(): Promise<WalletState> {
           method: "wallet_addEthereumChain",
           params: [
             {
-              chainId: SEPOLIA_CHAIN_ID,
-              chainName: "Sepolia",
+              chainId: ARBITRUM_SEPOLIA_CHAIN_ID,
+              chainName: "Arbitrum Sepolia",
               nativeCurrency: {
                 name: "Ethereum",
                 symbol: "ETH",
                 decimals: 18,
               },
               rpcUrls: [
-                "https://sepolia.infura.io/v3/",
-                "https://rpc.sepolia.org",
-                "https://ethereum-sepolia-rpc.publicnode.com",
+                "https://arbitrum-sepolia.blockpi.network/v1/rpc/public",
+                "https://arbitrum-sepolia-rpc.publicnode.com",
+                "https://arbitrum-sepolia.chainstacklabs.com",
               ],
-              blockExplorerUrls: ["https://sepolia.etherscan.io"],
+              blockExplorerUrls: ["https://sepolia.arbiscan.io"],
             },
           ],
         });
@@ -110,7 +110,7 @@ export async function validateContract(provider: ethers.BrowserProvider): Promis
     if (code === "0x" || code === "0x0") {
       return { 
         exists: false, 
-        error: `El contrato no está desplegado en esta red en la dirección ${CONTRACT_ADDRESS}. Por favor, despliega el contrato primero en Sepolia.` 
+        error: `El contrato no está desplegado en esta red en la dirección ${CONTRACT_ADDRESS}. Por favor, despliega el contrato primero en Arbitrum Sepolia.` 
       };
     }
     return { exists: true };

@@ -155,9 +155,9 @@ export function FinalizeWithdrawalModal({ isOpen, onClose }: FinalizeWithdrawalM
       
       // Handle specific error cases
       if (error?.message?.includes("Failed to fetch") || error?.code === "UNKNOWN_ERROR") {
-        errorMessage = "Error de conexión. Verifica que estés en Sepolia y que el RPC funcione.";
+        errorMessage = "Error de conexión. Verifica que estés en Arbitrum Sepolia y que el RPC funcione.";
       } else if (error?.message?.includes("insufficient funds") || error?.code === "INSUFFICIENT_FUNDS") {
-        errorMessage = "Fondos insuficientes. Necesitas ETH en Sepolia para pagar el gas.";
+        errorMessage = "Fondos insuficientes. Necesitas ETH en Arbitrum Sepolia para pagar el gas.";
       } else if (error?.message?.includes("user rejected") || error?.code === 4001) {
         errorMessage = "Transacción cancelada por el usuario.";
       } else if (error?.message?.includes("execution reverted") || error?.code === "CALL_EXCEPTION") {
