@@ -1,6 +1,5 @@
 // Contract address deployed on Arbitrum Sepolia
-// ⚠️ IMPORTANTE: Después de desplegar, actualiza esta dirección con la nueva
-export const CONTRACT_ADDRESS = "0xca9F7ab963b2fBf4f82270E9Ee1C7F1c10A84384"; // ACTUALIZAR DESPUÉS DEL DEPLOY
+export const CONTRACT_ADDRESS = "0x5062025EEEF78eC18ebB027632e32AAD7b5110C0";
 
 // Arbitrum Sepolia Network ID
 export const ARBITRUM_SEPOLIA_CHAIN_ID = "0x66eee"; // 421614 in hex
