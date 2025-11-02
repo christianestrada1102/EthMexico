@@ -6,6 +6,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Wallet, ArrowRight, Zap, Lock, DollarSign, Sparkles } from "lucide-react";
 import { WalletModal } from "@/components/WalletModal";
 import { useWalletStore } from "@/store/walletStore";
+import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 
 // Floating particles component for blockchain effect
 const FloatingParticle = ({ delay = 0 }: { delay?: number }) => {
@@ -147,10 +148,13 @@ export default function Home() {
 
   return (
     <div 
-      className="min-h-screen bg-gradient-to-br from-arbitrum-navy via-arbitrum-dark to-arbitrum-navy flex items-center justify-center p-4 relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Settarb Animated Background */}
+      <AnimatedBackground />
+      
       {/* Enhanced animated background with gradient overlay */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Large gradient orbs */}
@@ -225,6 +229,30 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
+          {/* Powered by Arbitrum Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8"
+          >
+            <motion.div
+              className="w-2 h-2 rounded-full bg-arbitrum-cyan"
+              animate={{
+                opacity: [0.5, 1, 0.5],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <span className="text-sm text-arbitrum-cyan font-medium">
+              Powered by Arbitrum
+            </span>
+          </motion.div>
+
           {/* Main icon with enhanced glow */}
           <motion.div
             className="inline-flex items-center justify-center mb-10 relative"
@@ -271,8 +299,8 @@ export default function Home() {
             transition={{ delay: 0.2 }}
             className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 relative"
           >
-            <span className="bg-gradient-to-r from-arbitrum-blue via-arbitrum-cyan via-purple-400 to-arbitrum-blue bg-clip-text text-transparent bg-[length:200%_auto] animate-[shimmer_3s_ease-in-out_infinite] drop-shadow-2xl">
-              BridgeFastWithdraw
+            <span className="bg-gradient-to-r from-white via-arbitrum-blue to-arbitrum-cyan bg-clip-text text-transparent bg-[length:200%_auto] animate-[shimmer_3s_ease-in-out_infinite] drop-shadow-2xl font-display">
+              Settarb
             </span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-arbitrum-blue/0 via-arbitrum-cyan/30 to-arbitrum-blue/0 blur-xl"
@@ -293,7 +321,7 @@ export default function Home() {
             transition={{ delay: 0.3 }}
             className="text-2xl md:text-3xl text-gray-200 mb-3 font-medium tracking-tight"
           >
-            Sistema de Retiros Rápidos L2→L1
+            Sistema de Retiros Rápidos y Liquidez L2→L1
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
@@ -301,7 +329,7 @@ export default function Home() {
             transition={{ delay: 0.4 }}
             className="text-lg md:text-xl text-gray-400 mb-16 max-w-2xl mx-auto leading-relaxed"
           >
-            Recibe tus fondos instantáneamente en lugar de esperar 7 días
+            Retira tus fondos de Arbitrum a Ethereum en segundos, no en días. Proveedores de liquidez adelantan tus fondos instantáneamente.
           </motion.p>
 
           {/* Enhanced CTA button */}

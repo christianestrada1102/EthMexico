@@ -1,7 +1,8 @@
 {
-  "name": "bridge-fast-withdraw-frontend",
-  "version": "0.1.0",
+  "name": "settarb",
+  "version": "1.0.0",
   "private": true,
+  "description": "Settarb - Sistema de Retiros Rápidos y Liquidez L2→L1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

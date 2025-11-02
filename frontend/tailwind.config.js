@@ -9,9 +9,23 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        navy: {
+          50: '#E6E8ED',
+          100: '#CDD1DB',
+          200: '#9BA3B7',
+          300: '#697593',
+          400: '#37476F',
+          500: '#071027', // Principal
+          600: '#050C1F',
+          700: '#040917',
+          800: '#02050F',
+          900: '#010207',
+        },
         arbitrum: {
           blue: '#28A0F0',
           cyan: '#00E0FF',
+          purple: '#9C4CFF',
+          darkBlue: '#0E163B',
           navy: '#0A0E17',
           dark: '#0F172A',
           light: '#1E293B',
@@ -22,24 +36,38 @@ module.exports = {
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
-          500: '#28A0F0', // Arbitrum blue
+          500: '#28A0F0',
           600: '#2563eb',
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
         },
         accent: {
-          400: '#00E0FF', // Arbitrum cyan
+          400: '#00E0FF',
           500: '#00E0FF',
           600: '#00B8CC',
         },
+        success: '#10B981',
+        warning: '#F59E0B',
+        error: '#EF4444',
+        info: '#3B82F6',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      fontSize: {
+        hero: ['4.5rem', { lineHeight: '1.1', fontWeight: '700' }],
+        h1: ['3rem', { lineHeight: '1.2', fontWeight: '600' }],
+        h2: ['2.25rem', { lineHeight: '1.3', fontWeight: '600' }],
+        h3: ['1.875rem', { lineHeight: '1.4', fontWeight: '500' }],
       },
       backdropBlur: {
         xs: '2px',
+        sm: '6px',
+        md: '12px',
+        lg: '24px',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-in-out',

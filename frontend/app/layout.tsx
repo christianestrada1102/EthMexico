@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BridgeFastWithdraw - Retiros Rápidos L2→L1",
-  description: "Sistema de retiros rápidos para puentes L2→L1",
+  title: "Settarb - Retiros Rápidos y Liquidez L2→L1",
+  description: "Settarb - Retira tus fondos de Arbitrum a Ethereum en segundos. Sistema de retiros rápidos L2→L1 con proveedores de liquidez.",
+  openGraph: {
+    title: "Settarb - Retiros Rápidos L2→L1",
+    description: "Retira tus fondos de Arbitrum a Ethereum en segundos, no en días",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
