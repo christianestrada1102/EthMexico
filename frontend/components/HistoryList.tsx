@@ -158,7 +158,7 @@ export function HistoryList() {
                   </motion.button>
                   {item.status !== "pending" && (
                     <motion.a
-                      href={`https://sepolia.etherscan.io/tx/${item.txHash}`}
+                      href={`https://sepolia-explorer.arbitrum.io/tx/${item.txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.1 }}

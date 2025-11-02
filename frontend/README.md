@@ -1,6 +1,6 @@
 # SettArb - Frontend
 
-Frontend Next.js para el sistema de retiros rápidos SettArb desplegado en Sepolia.
+Frontend Next.js para el sistema de retiros rápidos SettArb. Los usuarios se conectan desde Arbitrum Sepolia (L2) y el contrato está desplegado en Sepolia (L1).
 
 ## 🚀 Tecnologías
 
@@ -35,7 +35,7 @@ SettArb utiliza un sistema de diseño moderno inspirado en Arbitrum con:
 
 ## 🔗 Contrato
 
-El contrato está desplegado en Arbitrum Sepolia. Ver `lib/constants.ts` para la dirección.
+El contrato está desplegado en Sepolia (L1). Los usuarios deben conectarse desde Arbitrum Sepolia (L2) usando MetaMask. Ver `lib/constants.ts` para la dirección del contrato.
 
 ## 📝 Licencia
 

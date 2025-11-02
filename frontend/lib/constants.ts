@@ -1,8 +1,8 @@
-// Contract address deployed on Sepolia
+// Contract address deployed on Sepolia (L1)
 export const CONTRACT_ADDRESS = "0xca9F7ab963b2fBf4f82270E9Ee1C7F1c10A84384";
 
-// Sepolia Network ID
-export const SEPOLIA_CHAIN_ID = "0xaa36a7"; // 11155111 in hex
+// Arbitrum Sepolia Network ID (L2)
+export const ARBITRUM_SEPOLIA_CHAIN_ID = "0x66eee"; // 421614 in hex
 
 // Contract ABI
 export const CONTRACT_ABI = [
