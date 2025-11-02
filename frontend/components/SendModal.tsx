@@ -79,11 +79,23 @@ export function SendModal({ isOpen, onClose }: SendModalProps) {
       setAmount("");
       onClose();
     } catch (error: any) {
-      addToast(error.message || "Error al enviar transacción.", "error");
+      console.error("Transaction error:", error);
+      let errorMessage = "Error al enviar transacción.";
+      
+      // Handle specific error cases
+      if (error?.message?.includes("Failed to fetch") || error?.code === "UNKNOWN_ERROR") {
+        errorMessage = "Error de conexión. Verifica que estés conectado a Arbitrum Sepolia y que MetaMask tenga conexión a internet.";
+      } else if (error?.message?.includes("insufficient funds") || error?.code === "INSUFFICIENT_FUNDS") {
+        errorMessage = "Fondos insuficientes. Necesitas ETH en Arbitrum Sepolia para pagar el gas.";
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
+      addToast(errorMessage, "error");
       addToHistory({
         type: "withdrawal",
         status: "failed",
-        details: { action: "send", to: recipient, amount, error: error.message },
+        details: { action: "send", to: recipient, amount, error: errorMessage },
       });
     } finally {
       setLoading(false);

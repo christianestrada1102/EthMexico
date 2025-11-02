@@ -56,7 +56,11 @@ export async function connectMetaMask(): Promise<WalletState> {
                 symbol: "ETH",
                 decimals: 18,
               },
-              rpcUrls: ["https://sepolia-rollup.arbitrum.io/rpc"],
+              rpcUrls: [
+                "https://sepolia-rollup.arbitrum.io/rpc",
+                "https://arbitrum-sepolia.blockpi.network/v1/rpc/public",
+                "https://arbitrum-sepolia-rpc.publicnode.com"
+              ],
               blockExplorerUrls: ["https://sepolia-explorer.arbitrum.io"],
             },
           ],
