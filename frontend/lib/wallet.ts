@@ -57,8 +57,8 @@ export async function connectMetaMask(): Promise<WalletState> {
                 decimals: 18,
               },
               rpcUrls: [
-                "https://arbitrum-sepolia.blockpi.network/v1/rpc/public",
                 "https://arbitrum-sepolia-rpc.publicnode.com",
+                "https://arbitrum-sepolia.blockpi.network/v1/rpc/public",
                 "https://arbitrum-sepolia.chainstacklabs.com",
               ],
               blockExplorerUrls: ["https://sepolia.arbiscan.io"],
