@@ -217,7 +217,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="max-w-5xl w-full text-center relative z-10">
+      <div className="max-w-5xl w-full text-center relative z-10 flex flex-col items-center justify-center min-h-[60vh]">
         <motion.div
           ref={cardRef}
           style={{
@@ -228,47 +228,27 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          className="flex flex-col items-center justify-center w-full"
         >
-          {/* Powered by Arbitrum Badge */}
+          {/* Main icon with centered, subtle glow */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8"
+            className="flex items-center justify-center mb-10 relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
+            whileHover={{ scale: 1.05 }}
           >
+            {/* Subtle glow effect */}
             <motion.div
-              className="w-2 h-2 rounded-full bg-arbitrum-cyan"
+              className="absolute inset-0 bg-arbitrum-blue/20 rounded-3xl blur-3xl"
               animate={{
-                opacity: [0.5, 1, 0.5],
-                scale: [1, 1.2, 1],
+                scale: [1, 1.15, 1],
+                opacity: [0.3, 0.5, 0.3],
               }}
               transition={{
-                duration: 2,
+                duration: 4,
                 repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            <span className="text-sm text-arbitrum-cyan font-medium">
-              Powered by Arbitrum
-            </span>
-          </motion.div>
-
-          {/* Main icon with enhanced glow */}
-          <motion.div
-            className="inline-flex items-center justify-center mb-10 relative"
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <motion.div
-              className="absolute inset-0 bg-arbitrum-blue/30 rounded-3xl blur-2xl"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.5, 0.8, 0.5],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
+                ease: [0.4, 0, 0.6, 1],
               }}
             />
             <div className="relative w-28 h-28 rounded-3xl bg-gradient-to-br from-arbitrum-blue via-arbitrum-cyan to-arbitrum-blue p-1 shadow-2xl">
@@ -280,15 +260,15 @@ export default function Home() {
               className="absolute -top-2 -right-2"
               animate={{
                 rotate: [0, 360],
-                scale: [1, 1.2, 1],
+                scale: [1, 1.15, 1],
               }}
               transition={{
-                duration: 4,
+                duration: 5,
                 repeat: Infinity,
                 ease: "linear",
               }}
             >
-              <Sparkles className="w-6 h-6 text-arbitrum-cyan" />
+              <Sparkles className="w-6 h-6 text-arbitrum-cyan/70" />
             </motion.div>
           </motion.div>
 
