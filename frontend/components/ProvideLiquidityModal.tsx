@@ -79,28 +79,52 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
 
     setLoading(true);
     try {
-      // Explicit type guard: check all required properties exist
-      if (!wallet || wallet.providerType !== "metamask" || !wallet.provider || !wallet.signer || !wallet.address) {
-        addToast("Error: Wallet no configurada correctamente.", "error");
+      // Explicit type guard: verify wallet and all required properties
+      if (!wallet) {
+        addToast("Error: Wallet no conectada.", "error");
         setLoading(false);
         return;
       }
       
-      // TypeScript now knows these are defined
-      const provider = wallet.provider;
-      const signer = wallet.signer;
-      const address = wallet.address;
+      if (wallet.providerType !== "metamask") {
+        addToast("Error: Solo disponible para MetaMask.", "error");
+        setLoading(false);
+        return;
+      }
+      
+      if (!wallet.provider) {
+        addToast("Error: No se pudo conectar con MetaMask.", "error");
+        setLoading(false);
+        return;
+      }
+      
+      if (!wallet.signer) {
+        addToast("Error: Signer no disponible.", "error");
+        setLoading(false);
+        return;
+      }
+      
+      if (!wallet.address) {
+        addToast("Error: Dirección de wallet no disponible.", "error");
+        setLoading(false);
+        return;
+      }
+      
+      // At this point, TypeScript knows all are defined
+      const provider: ethers.BrowserProvider = wallet.provider;
+      const signer: ethers.JsonRpcSigner = wallet.signer;
+      const address: string = wallet.address;
       
       // Check if LP can provide liquidity
       const canProvide = await canProvideLiquidity(provider, address);
-        if (!canProvide) {
-          addToast("No tienes suficiente bond para proveer liquidez.", "error");
-          setLoading(false);
-          return;
-        }
+      if (!canProvide) {
+        addToast("No tienes suficiente bond para proveer liquidez.", "error");
+        setLoading(false);
+        return;
+      }
 
-        const amount = ethers.formatEther(selectedRequest.amount);
-        const tx = await provideLiquidity(signer, parseInt(requestId), amount);
+      const amount = ethers.formatEther(selectedRequest.amount);
+      const tx = await provideLiquidity(signer, parseInt(requestId), amount);
         
         addToHistory({
           type: "liquidity",
