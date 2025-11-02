@@ -79,13 +79,20 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
 
     setLoading(true);
     try {
-      if (wallet && wallet.providerType === "metamask" && wallet.provider && wallet.signer && wallet.address) {
-        // Type guard: wallet.provider is guaranteed to be BrowserProvider here
-        const provider = wallet.provider;
-        const address = wallet.address;
-        
-        // Check if LP can provide liquidity
-        const canProvide = await canProvideLiquidity(provider, address);
+      // Explicit type guard: check all required properties exist
+      if (!wallet || wallet.providerType !== "metamask" || !wallet.provider || !wallet.signer || !wallet.address) {
+        addToast("Error: Wallet no configurada correctamente.", "error");
+        setLoading(false);
+        return;
+      }
+      
+      // TypeScript now knows these are defined
+      const provider = wallet.provider;
+      const signer = wallet.signer;
+      const address = wallet.address;
+      
+      // Check if LP can provide liquidity
+      const canProvide = await canProvideLiquidity(provider, address);
         if (!canProvide) {
           addToast("No tienes suficiente bond para proveer liquidez.", "error");
           setLoading(false);
@@ -93,7 +100,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
         }
 
         const amount = ethers.formatEther(selectedRequest.amount);
-        const tx = await provideLiquidity(wallet.signer, parseInt(requestId), amount);
+        const tx = await provideLiquidity(signer, parseInt(requestId), amount);
         
         addToHistory({
           type: "liquidity",
