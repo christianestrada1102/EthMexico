@@ -81,9 +81,10 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
     try {
       if (wallet && wallet.providerType === "metamask" && wallet.provider && wallet.signer && wallet.address) {
         // Type guard: verify all properties are defined
-        const provider = wallet.provider;
-        const signer = wallet.signer;
-        const address = wallet.address;
+        // Use type assertions after validation
+        const provider: ethers.BrowserProvider = wallet.provider as ethers.BrowserProvider;
+        const signer: ethers.JsonRpcSigner = wallet.signer as ethers.JsonRpcSigner;
+        const address: string = wallet.address as string;
         
         // Check if LP can provide liquidity
         const canProvide = await canProvideLiquidity(provider, address);
