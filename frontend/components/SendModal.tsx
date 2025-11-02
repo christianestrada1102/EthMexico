@@ -84,9 +84,9 @@ export function SendModal({ isOpen, onClose }: SendModalProps) {
       
       // Handle specific error cases
       if (error?.message?.includes("Failed to fetch") || error?.code === "UNKNOWN_ERROR") {
-        errorMessage = "Error de conexión. Verifica que estés conectado a Arbitrum Sepolia y que MetaMask tenga conexión a internet.";
+        errorMessage = "Error de conexión. Verifica que estés conectado a Sepolia y que MetaMask tenga conexión a internet.";
       } else if (error?.message?.includes("insufficient funds") || error?.code === "INSUFFICIENT_FUNDS") {
-        errorMessage = "Fondos insuficientes. Necesitas ETH en Arbitrum Sepolia para pagar el gas.";
+        errorMessage = "Fondos insuficientes. Necesitas ETH en Sepolia para pagar el gas.";
       } else if (error?.message) {
         errorMessage = error.message;
       }
