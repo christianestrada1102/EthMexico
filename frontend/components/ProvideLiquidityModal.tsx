@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, TrendingUp } from "lucide-react";
 import { useWalletStore } from "@/store/walletStore";
-import { provideLiquidity, getWithdrawal, calculateFee, getWithdrawalCounter, canProvideLiquidity } from "@/lib/contract";
+import { provideLiquidity, getWithdrawal, calculateFee, getWithdrawalCounter } from "@/lib/contract";
 import { ethers } from "ethers";
 
 interface ProvideLiquidityModalProps {
@@ -111,17 +111,7 @@ export function ProvideLiquidityModal({ isOpen, onClose }: ProvideLiquidityModal
       }
       
       // At this point, TypeScript knows all are defined
-      const provider: ethers.BrowserProvider = wallet.provider;
       const signer: ethers.JsonRpcSigner = wallet.signer;
-      const address: string = wallet.address;
-      
-      // Check if LP can provide liquidity
-      const canProvide = await canProvideLiquidity(provider, address);
-      if (!canProvide) {
-        addToast("No tienes suficiente bond para proveer liquidez.", "error");
-        setLoading(false);
-        return;
-      }
 
       const amount = ethers.formatEther(selectedRequest.amount);
       const tx = await provideLiquidity(signer, parseInt(requestId), amount);
